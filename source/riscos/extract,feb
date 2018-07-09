@@ -8,8 +8,8 @@ cdir <SMB_DEST_DIR>
 cdir <SMB_DEST_DIR>.c++
 cdir <SMB_DEST_DIR>.h
 cdir <SMB_DEST_DIR>.o
-copy <SMB_SRC_DIR>.source.riscos.makefile <SMB_DEST_DIR>.makefile
-copy <SMB_SRC_DIR>.source.riscos.makeold <SMB_DEST_DIR>.makeold
+copy <SMB_SRC_DIR>.source.riscos.makefile,fe1 <SMB_DEST_DIR>.makefile
+copy <SMB_SRC_DIR>.source.riscos.makeold,fe1 <SMB_DEST_DIR>.makeold
 copy <SMB_SRC_DIR>.source.riscos.doc/h <SMB_DEST_DIR>.h.doc
 copy <SMB_SRC_DIR>.source.riscos.doc/cpp <SMB_DEST_DIR>.c++.doc
 copy <SMB_SRC_DIR>.source.gfxoff/cpp <SMB_DEST_DIR>.c++.gfxoff
@@ -60,10 +60,10 @@ copy <SMB_SRC_DIR>.source.data.gfxdata3/cpp <SMB_DEST_DIR>.c++.gfxdata3
 copy <SMB_SRC_DIR>.source.data.mapdata/cpp <SMB_DEST_DIR>.c++.mapdata
 copy <SMB_SRC_DIR>.source.riscos.swicalls/h <SMB_DEST_DIR>.h.swicalls
 copy <SMB_SRC_DIR>.source.riscos.swicalls/cpp <SMB_DEST_DIR>.c++.swicalls
-copy <SMB_SRC_DIR>.source.riscos.!boot <SMB_DEST_DIR>.!boot
+copy <SMB_SRC_DIR>.source.riscos.!smb.!boot,feb <SMB_DEST_DIR>.!boot
 copy <SMB_SRC_DIR>.copying <SMB_DEST_DIR>.copying
-copy <SMB_SRC_DIR>.source.riscos.!sprites <SMB_DEST_DIR>.!sprites
-copy <SMB_SRC_DIR>.source.riscos.!run <SMB_DEST_DIR>.!run
+copy <SMB_SRC_DIR>.source.riscos.!smb.!sprites,ff9 <SMB_DEST_DIR>.!sprites
+copy <SMB_SRC_DIR>.source.riscos.!smb.!run,feb <SMB_DEST_DIR>.!run
 
 settype <SMB_DEST_DIR>.!sprites Sprite
 settype <SMB_DEST_DIR>.!boot Obey
