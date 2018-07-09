@@ -100,7 +100,7 @@
 
 #define SND_COUNT		(1 + SND_END_NUMBER - SND_START_NUMBER)
 
-#ifdef METHANE_MIKMOD
+#if defined(METHANE_MIKMOD) || defined(METHANE_RISCOS)
 extern MODULE_RESOURCE_DATA MethaneModuleData[MODULE_COUNT];
 extern SAMPLE_RESOURCE_DATA MethaneSampleData[SND_COUNT];
 #endif
