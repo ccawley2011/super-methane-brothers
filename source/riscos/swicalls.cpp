@@ -255,6 +255,16 @@ void smb_snd_play_module(unsigned char *mptr)
 	}
 }
 
+void smb_snd_stop_module()
+{
+	_kernel_swi_regs regs ;
+
+	if (QTM_Available)
+	{
+		_kernel_swi( SMB_QTM_Stop , &regs , &regs );
+	}
+}
+
 //------------------------------------------------------------------------------
 //! \brief Play a sample
 //!

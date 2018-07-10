@@ -445,6 +445,7 @@ extern unsigned int smb_gettime( unsigned int compval );
 extern void smb_snd_library_close(void);
 extern void smb_snd_library_init(void);
 extern void smb_snd_play_module(unsigned char *mptr);
+extern void smb_snd_stop_module(void);
 extern void smb_snd_play_sample(unsigned char *sptr, int len, int chan, int note, int volume);
 extern void smb_snd_stereo(int chan, int value);
 

@@ -149,7 +149,7 @@ void CQTMDrv::PlaySample(int id, int pos, int rate)
 //------------------------------------------------------------------------------
 void CQTMDrv::StopModule(void)
 {
-	// Not Coded
+	smb_snd_stop_module();
 }
 
 //------------------------------------------------------------------------------
