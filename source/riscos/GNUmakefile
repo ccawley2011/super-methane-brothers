@@ -5,6 +5,7 @@ METHANE_LIBS = -mlibscl
 CROSS = arm-unknown-riscos-
 
 OBJF =	build/riscos/doc.o \
+	build/riscos/audiodrv.o \
 	build/riscos/swicalls.o \
 	build/gfxoff.o \
 	build/baddie.o \

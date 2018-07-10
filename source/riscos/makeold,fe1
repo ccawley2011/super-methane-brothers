@@ -1,6 +1,6 @@
 # >MakeFile
 
-PROGS1 = o.doc o.swicalls
+PROGS1 = o.doc o.swicalls o.audiodrv
 PROGS2 = o.gfxoff o.baddie o.bitdraw o.bitgroup o.bititem o.boss o.game o.gasobj
 PROGS3 = o.global o.goodie o.maps o.misc o.objlist o.player o.power o.target o.suck
 PROGS4 = o.weapon o.sound
@@ -16,6 +16,7 @@ LIBS       = C:o.c++lib C:o.stubs
         c++ -c -faf -throwback -IC: -DMETHANE_RISCOS -DMETHANE_OLD_CPP -DMETHANE_OLD_CPP_NEW c++.$*
 
 o.doc : c++.doc
+o.audiodrv : c++.audiodrv
 o.swicalls : c++.swicalls
 o.gfxoff : c++.gfxoff
 o.baddie : c++.baddie

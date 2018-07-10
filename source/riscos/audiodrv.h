@@ -8,48 +8,30 @@
  ***************************************************************************/
 
 //------------------------------------------------------------------------------
-// The RISCOS main document header file
+// The QTM Sound Driver wrapper (Header File)
 //------------------------------------------------------------------------------
 
-#ifndef _doc_h
-#define _doc_h 1
+#ifdef METHANE_RISCOS
 
-#include "audiodrv.h"
-#include "game.h"
-#include "target.h"
+#ifndef _audiodrv_h
+#define _audiodrv_h 1
 
-class CQTMDrv;
-class CMethDoc
+#include "snddef.h"
+
+class CQTMDrv
 {
-
 public:
-	CMethDoc();
-	~CMethDoc();
-
-	void InitGame(void);
-	void StartGame(void);
-	void MainLoop(void *screen_ptr);
-	void RedrawMainView( int pal_change_flag );
-	void PlayModule(int id);
-	void StopModule(void);
+	CQTMDrv();
+	~CQTMDrv();
+	void InitDriver(void);
+	void RemoveDriver(void);
 	void PlaySample(int id, int pos, int rate);
-	void RemoveSoundDriver(void);
-	void InitSoundDriver(void);
+	void StopModule(void);
+	void PlayModule(int id);
 	void UpdateModule(int id);
-	void SaveScores(void);
-	void LoadScores(void);
 	void ChangeVolume(int s, int m);
-
-private:
-	CQTMDrv	*m_pQTMDrv;
-	void DrawScreen( void *screen_ptr );
-private:
-public:
-	CGameTarget	m_GameTarget;
 
 };
 
 #endif
-
-
-
+#endif // (METHANE_RISCOS)

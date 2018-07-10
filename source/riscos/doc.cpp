@@ -24,7 +24,6 @@ extern void main_code(void);
 //------------------------------------------------------------------------------
 CMethDoc Game;
 LAYER *TheScreen = 0;
-static int SampleChannel = 5;	// Used by CMethDoc::PlaySample
 
 //------------------------------------------------------------------------------
 // The HighScore table filename
@@ -145,6 +144,7 @@ void main_code(void)
 //------------------------------------------------------------------------------
 CMethDoc::CMethDoc()
 {
+	SMB_NEW(m_pQTMDrv, CQTMDrv);
 	m_GameTarget.Init(this);
 }
 
@@ -153,6 +153,11 @@ CMethDoc::CMethDoc()
 //------------------------------------------------------------------------------
 CMethDoc::~CMethDoc()
 {
+	if (m_pQTMDrv)
+	{
+		delete(m_pQTMDrv);
+		m_pQTMDrv = 0;
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -169,42 +174,7 @@ void CMethDoc::InitGame(void)
 //------------------------------------------------------------------------------
 void CMethDoc::InitSoundDriver(void)
 {
-	_kernel_swi_regs regs;
-	unsigned char *ptr;
-	int len;
-	int cnt;
-	unsigned char buffer[256];
-	unsigned char *dest_lptr;
-	unsigned char *lptr;
-	int amplitude;
-	signed char sample;
-
-	// Create the log conversion tables
-	dest_lptr = buffer;
-	for (cnt=-128; cnt<=127; cnt++)
-	{
-		amplitude = cnt;
-
-		regs.r[0] = amplitude << 24;
-		_kernel_swi(Sound_SoundLog, &regs, &regs);	// PRM 4-26
-		amplitude = regs.r[0];
-
-		*(dest_lptr++) = amplitude;
-	}
-
-	lptr = buffer;
-	for (cnt=0; cnt<SND_COUNT; cnt++)	// for all the samples
-	{
-		ptr = MethaneSampleData[cnt].ptr;
-		len = MethaneSampleData[cnt].length;
-		while(len>0)
-		{
-			sample = (signed char) *ptr;	// Get the sample
-			*(ptr) = buffer[128 + sample];	// Log the sample
-			ptr++;
-			len--;
-		}
-	}
+	m_pQTMDrv->InitDriver();
 }
 
 //------------------------------------------------------------------------------
@@ -212,6 +182,7 @@ void CMethDoc::InitSoundDriver(void)
 //------------------------------------------------------------------------------
 void CMethDoc::RemoveSoundDriver(void)
 {
+	m_pQTMDrv->RemoveDriver();
 }
 
 //------------------------------------------------------------------------------
@@ -280,50 +251,7 @@ void CMethDoc::MainLoop( void *screen_ptr )
 //------------------------------------------------------------------------------
 void CMethDoc::PlaySample(int id, int pos, int rate)
 {
-	SAMPLE_RESOURCE_DATA *snd_ptr;
-	int channel;
-	int volume;
-
-	id = id - SND_START_NUMBER;
-	if ((id<0) || (id >= SND_COUNT)) return;
-	snd_ptr = &MethaneSampleData[id];
-
-	// Assume centre position is critical (to fix fixed later)
-	if ((pos>=120) && (pos <=130))
-	{
-		channel = 8;
-	}else
-	{
-		// Use the 3 spare channels
-		SampleChannel++;
-		if (SampleChannel==8) SampleChannel = 5;
-		channel = SampleChannel;
-	}
-	smb_snd_stereo(channel, pos - 127);
-
-	// The volume wants to be equal while panning left to right
-	//volume = 256-8;
-	//pos = pos - 128;	// Centre position
-	//if (pos < 0) pos = -pos;	// Check sign
-	//volume = volume - pos;
-	volume = 256-64;
-
-	volume = volume >> 2;	// Divide by 4 to scale 0 to 64
-	volume = volume - 16;	// It's a bit load
-	if (volume < 10) volume = 10;	// It's a bit quiet
-
-	// Now for the amiga note conversion FUDGE !!! (That'll teach me for converting it to windows first)
-	if (rate >= 10000)
-	{
-		rate = rate / 30;
-	}else
-	{
-		rate = rate / 16;
-	}
-	if (rate < 113) rate = 113;	// QTM min note limit
-	if (rate > 856) rate = 856;	// QTM max note limit
-
-	smb_snd_play_sample(snd_ptr->ptr, snd_ptr->length, channel, rate, volume );
+	m_pQTMDrv->PlaySample(id, pos, rate);
 }
 
 //------------------------------------------------------------------------------
@@ -331,7 +259,7 @@ void CMethDoc::PlaySample(int id, int pos, int rate)
 //------------------------------------------------------------------------------
 void CMethDoc::StopModule(void)
 {
-	// Not Coded
+	m_pQTMDrv->StopModule();
 }
 
 //------------------------------------------------------------------------------
@@ -341,14 +269,7 @@ void CMethDoc::StopModule(void)
 //------------------------------------------------------------------------------
 void CMethDoc::PlayModule(int id)
 {
-	MODULE_RESOURCE_DATA *mptr;
-
-	id = id - MODULE_START_NUMBER;
-	if ((id<0) || (id >= MODULE_COUNT)) return;
-	mptr = &MethaneModuleData[id];
-
-	smb_snd_play_module(mptr->ptr);
-
+	m_pQTMDrv->PlayModule(id);
 }
 
 //------------------------------------------------------------------------------
@@ -358,7 +279,7 @@ void CMethDoc::PlayModule(int id)
 //------------------------------------------------------------------------------
 void CMethDoc::UpdateModule(int id)
 {
-	// Not required on RISCOS
+	m_pQTMDrv->UpdateModule(id);
 }
 
 //------------------------------------------------------------------------------
@@ -425,3 +346,12 @@ void CMethDoc::SaveScores(void)
 
 }
 
+//------------------------------------------------------------------------------
+//! \brief Change the music and sound volume
+//! \param s = sound volume (0 to 10)
+//! \param m = music volume (0 to 10)
+//------------------------------------------------------------------------------
+void CMethDoc::ChangeVolume(int s, int m)
+{
+	m_pQTMDrv->ChangeVolume(s, m);
+}

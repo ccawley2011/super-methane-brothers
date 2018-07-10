@@ -60,6 +60,8 @@ copy <SMB_SRC_DIR>.source.data.gfxdata3/cpp <SMB_DEST_DIR>.c++.gfxdata3
 copy <SMB_SRC_DIR>.source.data.mapdata/cpp <SMB_DEST_DIR>.c++.mapdata
 copy <SMB_SRC_DIR>.source.riscos.swicalls/h <SMB_DEST_DIR>.h.swicalls
 copy <SMB_SRC_DIR>.source.riscos.swicalls/cpp <SMB_DEST_DIR>.c++.swicalls
+copy <SMB_SRC_DIR>.source.riscos.audiodrv/h <SMB_DEST_DIR>.h.audiodrv
+copy <SMB_SRC_DIR>.source.riscos.audiodrv/cpp <SMB_DEST_DIR>.c++.audiodrv
 copy <SMB_SRC_DIR>.source.riscos.!smb.!boot,feb <SMB_DEST_DIR>.!boot
 copy <SMB_SRC_DIR>.copying <SMB_DEST_DIR>.copying
 copy <SMB_SRC_DIR>.source.riscos.!smb.!sprites,ff9 <SMB_DEST_DIR>.!sprites
