@@ -36,7 +36,6 @@ static char HighScoreFileName[] = "<SMBGame$Dir>.HiScores";
 //------------------------------------------------------------------------------
 int main( void )
 {
-	smb_snd_library_init();
 	SMB_Screen_Depth = AV_256_COLOUR;
 	SMB_Screen_Width = 640;
 	SMB_Screen_Height = 480;
@@ -46,7 +45,6 @@ int main( void )
 	smb_keyrep_off();
 	main_code();					// The main routine
 	smb_keyrep_on();
-	smb_snd_library_close();
 	return( 0 ) ;
 }
 

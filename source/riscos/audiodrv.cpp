@@ -28,6 +28,7 @@ static int SampleChannel = 5;	// Used by CQTMDrv::PlaySample
 //------------------------------------------------------------------------------
 CQTMDrv::CQTMDrv()
 {
+	smb_snd_library_init();
 }
 
 //------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ void CQTMDrv::InitDriver(void)
 //------------------------------------------------------------------------------
 void CQTMDrv::RemoveDriver(void)
 {
-	// This was never implemented in the first place
+	smb_snd_library_close();
 }
 
 //------------------------------------------------------------------------------
