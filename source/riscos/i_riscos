@@ -13,7 +13,7 @@ Link - V5.06, V5.08
 The GCC compiler may work, but it has not been tested
 
 For Audio, ensure that the QTM module has been loaded.
-See http://www.qthemusic.free-online.co.uk/
+See http://www.phlamethrower.co.uk/riscos/qtm.php
 
 To Enable Cheat Mode: Modify the line containing "(CHEAT MODE DISABLED)" in source/riscos/doc.cpp
 
