@@ -543,7 +543,7 @@ void smb_setscreen(int width, int height, int bpp, int framerate, int xeig, int 
 
 	regs.r[0] = 0 ;				// Reason Code
 	regs.r[1] = (int) mode_select;		// Mode Specifier
-	_kernel_swi( 0x65 , &regs , &regs );	// do command
+	_kernel_swi( OS_ScreenMode , &regs , &regs );	// do command
 
 	smb_cursor_off();			// Remove the cursor by default
 }
