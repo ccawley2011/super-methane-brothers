@@ -1166,4 +1166,12 @@ void smb_snd_stereo(int chan, int value)
 	}
 }
 
+void smb_mkdir(char *dirname)
+{
+	_kernel_swi_regs regs;
 
+	regs.r[0] = 8;
+	regs.r[1] = (int)dirname;
+	regs.r[4] = 0;
+	_kernel_swi( OS_File, &regs , &regs );
+}

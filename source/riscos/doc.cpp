@@ -28,7 +28,8 @@ LAYER *TheScreen = 0;
 //------------------------------------------------------------------------------
 // The HighScore table filename
 //------------------------------------------------------------------------------
-static char HighScoreFileName[] = "<SMBGame$Dir>.HiScores";
+static char HighScoreFilePath[] = "<Choices$Write>.Methane";
+static char HighScoreFileName[] = "<Choices$Write>.Methane.HiScores";
 #define HighScoreLoadBufferSize (MAX_HISCORES * 64)
 
 //------------------------------------------------------------------------------
@@ -41,6 +42,7 @@ int main( void )
 	SMB_Screen_Height = 480;
 	SMB_Screen_HZ = -1;
 	smb_view_screen();				// Set up the image library screen
+	smb_mkdir(HighScoreFilePath);
 
 	smb_keyrep_off();
 	main_code();					// The main routine
