@@ -3,6 +3,7 @@ SRCDIR ?= ..
 METHANE_FLAGS = -mlibscl -I${SRCDIR} -I${SRCDIR}/riscos -DMETHANE_RISCOS -DENABLE_SOUND
 METHANE_LIBS = -mlibscl
 CROSS = arm-unknown-riscos-
+ZIP = $(GCCSDK_INSTALL_ENV)/bin/zip -,
 
 OBJF =	build/riscos/doc.o \
 	build/riscos/audiodrv.o \
@@ -44,6 +45,10 @@ message:
 !smb/!RunImage,ff8: ${OBJF}
 	@mkdir -p !smb
 	${CROSS}g++ ${CXXFLAGS} ${OBJF}	-o $@ ${METHANE_LIBS}
+
+smbgame.zip: !smb/!RunImage,ff8
+	@${RM} $@
+	${ZIP} -9r $@ !smb
 
 clean:
 	@${RM} -R build
