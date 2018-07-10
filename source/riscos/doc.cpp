@@ -38,8 +38,8 @@ static char HighScoreFileName[] = "<Choices$Write>.Methane.HiScores";
 int main( void )
 {
 	SMB_Screen_Depth = AV_256_COLOUR;
-	SMB_Screen_Width = 640;
-	SMB_Screen_Height = 480;
+	SMB_Screen_Width = SCR_WIDTH;
+	SMB_Screen_Height = SCR_HEIGHT;
 	SMB_Screen_HZ = -1;
 	smb_view_screen();				// Set up the image library screen
 	smb_mkdir(HighScoreFilePath);
@@ -217,7 +217,7 @@ void CMethDoc::DrawScreen( void *screen_ptr )
 	int cnt;
 
 	smb_sync();	// Lock to VBL
-	smb_vgfx_sprite_draw( TheScreen, 128, 64, 0 );
+	smb_vgfx_sprite_draw( TheScreen, 0, 0, 0 );
 
 	// Set the game palette
 	pptr = m_GameTarget.m_rgbPalette;
