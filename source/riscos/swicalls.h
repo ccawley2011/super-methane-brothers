@@ -430,7 +430,7 @@ extern void smb_setgraphcol( int colour );
 extern void smb_setscreen(int width, int height, int bpp, int framerate, int xeig, int yeig);
 extern void smb_view_screen( void );
 extern void smb_vgfx_layer_free(LAYER *lptr);
-extern void smb_vgfx_baderror(char *txt, int num);
+extern void smb_vgfx_baderror(const char *txt, int num);
 extern LAYER *smb_vgfx_layer_create_sprite(int width, int height, int depth, int flags);
 extern void smb_vgfx_sprite_draw( LAYER *lptr, int xpos, int ypos, int gcol );
 extern void smb_put_at_sprite( Sprite_id *sprite_info, int sprite_index, int x, int y, int GCOLaction );

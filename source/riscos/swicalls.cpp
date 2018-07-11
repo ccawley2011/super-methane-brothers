@@ -60,7 +60,7 @@ char SMB_Keybank_Buffer[SMB_KB_MAX+1];
 //! 	\param txt = The text
 //!	\param num = The number
 //------------------------------------------------------------------------------
-void smb_vgfx_baderror(char *txt, int num)
+void smb_vgfx_baderror(const char *txt, int num)
 {
 	while(1)
 	{
