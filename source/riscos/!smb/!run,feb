@@ -2,6 +2,7 @@ Set SMBGame$Dir <Obey$Dir>
 
 Iconsprites <SMBGame$Dir>.!Sprites
 
+RMEnsure QTMTracker 1.27 X RMLoad System:Modules.Audio.Trackers.QTMModule
 RMEnsure QTMTracker 1.27 RMLoad <SMBGame$dir>.Modules.QTMModule
 RMEnsure QTMTracker 1.27 error You need QTMTracker 1.27 or later to run this game with sound
 
