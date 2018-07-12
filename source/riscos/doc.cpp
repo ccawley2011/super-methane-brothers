@@ -45,7 +45,9 @@ int main( void )
 	smb_mkdir(HighScoreFilePath);
 
 	smb_keyrep_off();
+	smb_set_escape_status(false);
 	main_code();					// The main routine
+	smb_set_escape_status(true);
 	smb_keyrep_on();
 	return( 0 ) ;
 }
@@ -105,6 +107,7 @@ void main_code(void)
 		{
 			key = smb_getkey();
 			if (key == '#') break;
+			if (key == '\x1b') break;
 			if (key == '\t')
 			{
 				Game.m_GameTarget.m_Game.TogglePuffBlow();

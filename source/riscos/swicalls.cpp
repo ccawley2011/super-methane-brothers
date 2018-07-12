@@ -1175,3 +1175,13 @@ void smb_mkdir(char *dirname)
 	regs.r[4] = 0;
 	_kernel_swi( OS_File, &regs , &regs );
 }
+
+void smb_set_escape_status(bool enabled)
+{
+	_kernel_swi_regs regs;
+
+	regs.r[0] = 229;
+	regs.r[1] = enabled ? 0 : 1;
+	regs.r[2] = 0;
+	_kernel_swi( OS_Byte, &regs , &regs );
+}
