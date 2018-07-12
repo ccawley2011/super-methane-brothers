@@ -2,8 +2,23 @@ SRCDIR ?= ..
 
 METHANE_FLAGS = -mlibscl -I${SRCDIR} -I${SRCDIR}/riscos -DMETHANE_RISCOS -DENABLE_SOUND
 METHANE_LIBS = -mlibscl
-CROSS = arm-unknown-riscos-
-ZIP = $(GCCSDK_INSTALL_ENV)/bin/zip -,
+
+ifeq ($(MAKE_HOST),arm-unknown-riscos)
+  ZIP = zip
+  RM = remove
+  RM_R = X wipe $1 ~CFR~V
+  MKDIR = cdir
+  / = .
+  . = /
+else
+  CROSS = arm-unknown-riscos-
+  ZIP = $(GCCSDK_INSTALL_ENV)/bin/zip -,
+  EXEEXT = ,ff8
+  RM_R = $(RM) -R $1
+  MKDIR = mkdir -p
+  / = /
+  . = .
+endif
 
 OBJF =	build/riscos/doc.o \
 	build/riscos/audiodrv.o \
@@ -33,26 +48,25 @@ OBJF =	build/riscos/doc.o \
 	build/data/gfxdata3.o \
 	build/data/mapdata.o
 
-all: message !smb/!RunImage,ff8
+all: message !smb/!RunImage$(EXEEXT)
 
 message:
 	@echo "Compiling Super Methane Brothers."
 	@echo "================================="
-	@mkdir -p build
-	@mkdir -p build/data
-	@mkdir -p build/riscos
+	@$(MKDIR) build
+	@$(MKDIR) build$(/)data
+	@$(MKDIR) build$(/)riscos
 
-!smb/!RunImage,ff8: ${OBJF}
-	@mkdir -p !smb
+!smb/!RunImage$(EXEEXT): ${OBJF}
 	${CROSS}g++ ${CXXFLAGS} ${OBJF}	-o $@ ${METHANE_LIBS}
 
-smbgame.zip: !smb/!RunImage,ff8
-	@${RM} $@
-	${ZIP} -9r $@ !smb
+smbgame.zip: !smb/!RunImage$(EXEEXT)
+	@${RM} smbgame$(.)zip
+	${ZIP} -9r smbgame$(.)zip !smb
 
 clean:
-	@${RM} -R build
-	@${RM} !smb/!RunImage,ff8
+	@$(call RM_R, build)
+	@${RM} !smb$(/)!RunImage$(EXEEXT)
 
 distclean: clean
 
