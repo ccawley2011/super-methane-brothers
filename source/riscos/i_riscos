@@ -3,22 +3,35 @@ RISCOS Installation Instructions
 
 Note: This game assumes sizeof(int) = sizeof(int *) = 4
 
-(If you don't know what RISCOS is - see http://www.riscos.com )
-
-Tested on the ACORN C/C++ compiler using the following:
-C++ - V3.1, V3.13
-C - V5.06, V5.09
-Link - V5.06, V5.08
-
-The GCC compiler may work, but it has not been tested
+(If you don't know what RISCOS is - see https://www.riscosopen.org )
 
 For Audio, ensure that the QTM module has been loaded.
 See http://www.phlamethrower.co.uk/riscos/qtm.php
 
 To Enable Cheat Mode: Modify the line containing "(CHEAT MODE DISABLED)" in source/riscos/doc.cpp
 
-Basic Installation
-==================
+Building with GCC
+=================
+
+To build Super Methane Brothers, you will need GCC, which is available from https://www.riscos.info/index.php/GCC . If you're building natively on RISC OS, you will also need srcrename from http://www.phlamethrower.co.uk/riscos/#util .
+
+To build on RISC OS:
+
+ - Ensure the file type of "source.riscos.!Mk,fd7" is set to &FD7 (Task Obey).
+ - Double click on !Mk,fd7
+
+To build from Linux:
+
+ - Set the current directory to the top source directory.
+ - `make -C source/riscos`
+
+Building with Acorn C/C++ (outdated)
+=========================
+
+Tested on the ACORN C/C++ compiler using the following:
+C++ - V3.1, V3.13
+C - V5.06, V5.09
+Link - V5.06, V5.08
 
 To extract the source code files into the standard directory structure:
 
