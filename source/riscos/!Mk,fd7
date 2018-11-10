@@ -1,0 +1,15 @@
+IfThere <Obey$Dir>.cpp Then Else srcrename <Obey$Dir>
+IfThere <Obey$Dir>.^.cpp Then Else srcrename <Obey$Dir>.^
+IfThere <Obey$Dir>.^.data.cpp Then Else srcrename <Obey$Dir>.^.data
+
+Set Alias$Temp IfThere %%0,%%1 Then Copy %%0,%%1 %%0 ~CD~V|MSetType %%0 %%1
+Temp <Obey$Dir>.!smb.!boot feb
+Temp <Obey$Dir>.!smb.!run feb
+Temp <Obey$Dir>.!smb.!sprites ff9
+Temp <Obey$Dir>.extract feb
+Temp <Obey$Dir>.makefile fe1
+Temp <Obey$Dir>.makeold fe1
+Unset Alias$Temp
+
+WimpSlot 16000K
+make -C <Obey$Dir>
