@@ -1,0 +1,11 @@
+language: cpp
+os: linux
+sudo: required
+services: 
+- docker
+
+install:
+- docker pull akuneko/riscos-gccsdk:latest
+
+script:
+- docker run -v ${PWD}:/super-methane-brothers akuneko/riscos-gccsdk:latest make -C /super-methane-brothers/source/riscos
