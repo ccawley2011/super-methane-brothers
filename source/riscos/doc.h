@@ -28,7 +28,7 @@ public:
 
 	void InitGame(void);
 	void StartGame(void);
-	void MainLoop(void *screen_ptr);
+	void MainLoop(void *screen_ptr, int paused_flag);
 	void RedrawMainView( int pal_change_flag );
 	void PlayModule(int id);
 	void StopModule(void);
@@ -42,7 +42,7 @@ public:
 
 private:
 	CQTMDrv	*m_pQTMDrv;
-	void DrawScreen( void *screen_ptr );
+	void DrawScreen( void *screen_ptr, int paused_flag );
 private:
 public:
 	CGameTarget	m_GameTarget;

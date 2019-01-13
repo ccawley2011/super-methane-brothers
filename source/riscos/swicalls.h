@@ -57,8 +57,11 @@
 #define SMB_KB_W	8
 #define SMB_KB_S	9
 #define SMB_KB_SHIFT	10
+#define SMB_KB_ESCAPE	11
+#define SMB_KB_TOGGLE	12
+#define SMB_KB_PAUSE	13
 
-#define SMB_KB_MAX	(10)
+#define SMB_KB_MAX	(13)
 
 #define BIT0 (1<<0)
 #define BIT1 (1<<1)
@@ -257,7 +260,7 @@ typedef struct _sprite_id {
 #define SPRINFO_MODE_OLD	(BIT0)	// A sprite using the old mode number (See PRM 1-749)
 #define SPRINFO_MODE_NEW	(BIT1)	// (Default) A sprite using the new mode number (See PRM 5-87)
 
-#define SPRINFO_MASK_OLD	(BIT2)	// A mask in the same byte per pixel format as the image 
+#define SPRINFO_MASK_OLD	(BIT2)	// A mask in the same byte per pixel format as the image
 #define SPRINFO_MASK_NEW	(BIT3)	// A mask in 1 one byte per pixel format
 
 // (Each colour uses 2 words, each word is an identical 0xBBGGRR00 colour - why? ask Acorn!!!)
@@ -411,6 +414,12 @@ extern int QTM_Available;
 // 0 = Not Pressed
 // 1 = Key Pressed
 extern char SMB_Keybank_Buffer[SMB_KB_MAX+1];
+extern char SMB_Keybank_Last[SMB_KB_MAX+1];
+
+// Macros to simplify reading from SMB_Keybank_Buffer
+#define SMB_KeyDown(code) SMB_Keybank_Buffer[code]
+#define SMB_KeyChanged(code) (SMB_Keybank_Buffer[code] != SMB_Keybank_Last[code]) ? 1 : 0
+#define SMB_KeyPressed(code) SMB_KeyDown(code) && SMB_KeyChanged(code)
 
 //------------------------------------------------------------------------------
 // Functions

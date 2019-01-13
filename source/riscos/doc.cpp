@@ -64,6 +64,7 @@ void main_code(void)
 	unsigned int time_start;
 	unsigned int time_now;
 	int time_diff;
+	int game_paused = 0;
 
 	lptr = smb_vgfx_layer_create_sprite( SCR_WIDTH, SCR_HEIGHT, AV_256_COLOUR, 0);
 
@@ -86,9 +87,10 @@ void main_code(void)
 	printf("Keys:\n");
 	printf("Player One - Use Cursor keys and control (CTRL) to fire.\n");
 	printf("Player Two - Use A,W,S,D and shift to fire.\n\n");
-	printf("# = Quit (and save high scores)\n");
+	printf("Esc = Quit (and save high scores)\n");
 	printf("TAB = Change player graphic during game\n");
-	//printf("F1 = Next Level (DISABLED)\n");
+	printf("F1 = Pause\n");
+	//printf("F11 = Next Level (DISABLED)\n");
 
 	smb_keybank_flush();
 	TheScreen = lptr;
@@ -106,29 +108,35 @@ void main_code(void)
 		if (smb_getkeyready())
 		{
 			key = smb_getkey();
-			if (key == '#') break;
-			if (key == '\x1b') break;
-			if (key == '\t')
-			{
-				Game.m_GameTarget.m_Game.TogglePuffBlow();
-			}
 			jptr1->key = key;
 			jptr2->key = key;
 		}
-		jptr1->right = SMB_Keybank_Buffer[SMB_KB_RIGHT];
-		jptr1->left = SMB_Keybank_Buffer[SMB_KB_LEFT];
-		jptr1->up = SMB_Keybank_Buffer[SMB_KB_UP];
-		jptr1->down = SMB_Keybank_Buffer[SMB_KB_DOWN];
-		jptr1->fire = SMB_Keybank_Buffer[SMB_KB_FIRE];
+		if (SMB_KeyPressed(SMB_KB_ESCAPE) == 1)
+		{
+			break;
+		}
+		if (SMB_KeyPressed(SMB_KB_TOGGLE) == 1)
+		{
+			Game.m_GameTarget.m_Game.TogglePuffBlow();
+		}
+		if (SMB_KeyPressed(SMB_KB_PAUSE) == 1)
+		{
+			game_paused = !game_paused;
+		}
+		jptr1->right = SMB_KeyDown(SMB_KB_RIGHT);
+		jptr1->left = SMB_KeyDown(SMB_KB_LEFT);
+		jptr1->up = SMB_KeyDown(SMB_KB_UP);
+		jptr1->down = SMB_KeyDown(SMB_KB_DOWN);
+		jptr1->fire = SMB_KeyDown(SMB_KB_FIRE);
 
-		jptr2->right = SMB_Keybank_Buffer[SMB_KB_D];
-		jptr2->left = SMB_Keybank_Buffer[SMB_KB_A];
-		jptr2->up = SMB_Keybank_Buffer[SMB_KB_W];
-		jptr2->down = SMB_Keybank_Buffer[SMB_KB_S];
-		jptr2->fire = SMB_Keybank_Buffer[SMB_KB_SHIFT];
+		jptr2->right = SMB_KeyDown(SMB_KB_D);
+		jptr2->left = SMB_KeyDown(SMB_KB_A);
+		jptr2->up = SMB_KeyDown(SMB_KB_W);
+		jptr2->down = SMB_KeyDown(SMB_KB_S);
+		jptr2->fire = SMB_KeyDown(SMB_KB_SHIFT);
 
-		// (CHEAT MODE DISABLED) --> jptr1->next_level = SMB_Keybank_Buffer[SMB_KB_CHEAT];
-		Game.MainLoop(0);
+		// (CHEAT MODE DISABLED) --> jptr1->next_level = SMB_KeyDown(SMB_KB_CHEAT);
+		Game.MainLoop(0, game_paused);
 		do
 		{
 			time_now = smb_gettime(0);
@@ -210,38 +218,52 @@ void CMethDoc::RedrawMainView( int pal_change_flag )
 //! \brief Draw the screen
 //!
 //! 	\param screen_ptr = UNUSED
+//!	\param paused_flag = 0 = Game not paused
 //------------------------------------------------------------------------------
-void CMethDoc::DrawScreen( void *screen_ptr )
+void CMethDoc::DrawScreen( void *screen_ptr, int paused_flag )
 {
 	METHANE_RGB *pptr;
 	unsigned char red;
 	unsigned char green;
 	unsigned char blue;
-	int cnt;
+	int cnt, cval;
 
 	smb_sync();	// Lock to VBL
 	smb_vgfx_sprite_draw( TheScreen, 0, 0, 0 );
 
 	// Set the game palette
 	pptr = m_GameTarget.m_rgbPalette;
-	for (cnt=0; cnt < PALETTE_SIZE; cnt++, pptr++)
+	if (!paused_flag)
 	{
-		red = pptr->red;
-		green = pptr->green;
-		blue = pptr->blue; 
-		smb_setpalette( cnt, 16, red, green, blue );
+		for (cnt=0; cnt < PALETTE_SIZE; cnt++, pptr++)
+		{
+			red = pptr->red;
+			green = pptr->green;
+			blue = pptr->blue;
+			smb_setpalette( cnt, 16, red, green, blue );
+		}
+	} else {	// If paused - grey scale the palette
+		for (cnt=0; cnt < PALETTE_SIZE; cnt++, pptr++)
+		{
+			cval = (pptr->red + pptr->green + pptr->blue) / 3;
+			smb_setpalette( cnt, 16, cval, cval, cval );
+		}
 	}
 }
 
 //------------------------------------------------------------------------------
-//! \brief The Game Main Loop 
+//! \brief The Game Main Loop
 //!
 //! 	\param screen_ptr = UNUSED
+//!	\param paused_flag = 0 = Game not paused
 //------------------------------------------------------------------------------
-void CMethDoc::MainLoop( void *screen_ptr )
+void CMethDoc::MainLoop( void *screen_ptr, int paused_flag )
 {
-	m_GameTarget.MainLoop();
-	DrawScreen( screen_ptr );
+	if (!paused_flag)
+	{
+		m_GameTarget.MainLoop();
+	}
+	DrawScreen( screen_ptr, paused_flag );
 
 }
 

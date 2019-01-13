@@ -53,6 +53,7 @@ static int KeyRepRate = 32;
 // 1 = Key Pressed
 //------------------------------------------------------------------------------
 char SMB_Keybank_Buffer[SMB_KB_MAX+1];
+char SMB_Keybank_Last[SMB_KB_MAX+1];
 
 //------------------------------------------------------------------------------
 //! \brief Display a bad error
@@ -243,7 +244,7 @@ void smb_snd_play_module(unsigned char *mptr)
 
 		regs.r[ 0 ] = -1;
 		_kernel_swi( SMB_QTM_Clear , &regs , &regs );			// Do command
-	
+
 		regs.r[ 0 ] = 0;
 		regs.r[ 1 ] = (int) mptr;
 
@@ -339,7 +340,7 @@ int smb_getkeyready( void )
 //! \brief Read a character from the input stream (See PRM 1-852)
 //!
 //! Note: When reading 'ABCD' from the keyboard, the character may be in
-//! upper or lower case ( use key = toupper(key) (in ctype.h) ) 
+//! upper or lower case ( use key = toupper(key) (in ctype.h) )
 //!
 //!	\return Charactor read
 //------------------------------------------------------------------------------
@@ -496,7 +497,7 @@ void smb_setgraphcol( int colour )
 //!
 //! 	\param width = screen width
 //!	\param height = screen height
-//!	\param bpp = pixel depth (2 = 16 colour - See PRM 5-80) 
+//!	\param bpp = pixel depth (2 = 16 colour - See PRM 5-80)
 //!	\param framerate = frame rate Hz (-1 = Highest available) (75Hz or 60Hz)
 //!	\param xeig = X Eig Factor (0 = None, 1 = Normal)
 //!	\param yeig = Y Eig Factor (0 = None, 1 = Normal)
@@ -533,7 +534,7 @@ void smb_setscreen(int width, int height, int bpp, int framerate, int xeig, int 
 	{
 		mode_select[9] = -1;	// End of list item
 	}
-	
+
 	mode_select[1] = width;			// store width
 	mode_select[2] = height;		// store height
 	mode_select[3] = bpp;			// store bpp
@@ -611,7 +612,7 @@ LAYER *smb_vgfx_layer_create_sprite(int width, int height, int depth, int flags)
 	// Perform a check on the flags
 	if (flags & SPRINFO_MODE_OLD)		// Is old flags enabled
 	{
-		// Only old flags should be enabled		
+		// Only old flags should be enabled
 		if (flags & (SPRINFO_MODE_NEW | SPRINFO_MASK_NEW | SPRINFO_DPI_180 | SPRINFO_DPI_22) )
 		{
 			smb_vgfx_baderror("Layer: MODE_OLD flags mixed with NEW flags", 0);
@@ -983,7 +984,7 @@ void smb_vgfx_layer_realise(LAYER *lptr)
 	{
 		smb_vgfx_baderror("Layer: No bitmap to realise", 0);
 	}
-	
+
 	height = lptr->height;
 	true_width = lptr->true_word_width;
 	memptr = lptr->bitmap_ptr;
@@ -1098,8 +1099,15 @@ static void process_key(int code, int flag)
 //------------------------------------------------------------------------------
 void smb_keybank_scan(void)
 {
+	// Store the previous keyboard state
+	memcpy(SMB_Keybank_Last, SMB_Keybank_Buffer, sizeof(SMB_Keybank_Buffer));
+
 	// Check each key (PRM 1-849)
-	process_key( SMB_KB_CHEAT, check_key(113) );
+	process_key( SMB_KB_ESCAPE, check_key(112) );
+	process_key( SMB_KB_TOGGLE, check_key(96) );
+	process_key( SMB_KB_PAUSE, check_key(113) );
+	process_key( SMB_KB_CHEAT, check_key(28) );
+
 	process_key( SMB_KB_FIRE, check_ctrl() );
 	process_key( SMB_KB_LEFT, check_key(25) );
 	process_key( SMB_KB_RIGHT, check_key(121) );
@@ -1120,6 +1128,7 @@ void smb_keybank_scan(void)
 void smb_keybank_flush(void)
 {
 	memset(SMB_Keybank_Buffer, 0, sizeof(SMB_Keybank_Buffer));
+	memset(SMB_Keybank_Last, 0, sizeof(SMB_Keybank_Last));
 }
 
 //------------------------------------------------------------------------------
@@ -1160,8 +1169,8 @@ void smb_snd_stereo(int chan, int value)
 		if (chan<1) return;
 		if (chan>8) return;
 
-		regs.r[0] = chan; 
-		regs.r[1] = value; 
+		regs.r[0] = chan;
+		regs.r[1] = value;
 		_kernel_swi( SMB_QTM_Stereo, &regs , &regs );			// Do command
 	}
 }
